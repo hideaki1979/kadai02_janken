@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<link rel="stylesheet" href="css/sample4.css">
+<link rel="shortcut icon" href="img/janken_fav.jpg" type="image/x-icon">
+<title>じゃんけんアプリ</title>
+</head>
+<body>
+
+<header>
+  <div class="header_container">
+    <p class="maintitle">じゃんけんアプリ</p>
+    <div class="score_container">
+      <p>現在の得点：<span id="score"></span>点</p>
+      <div class="inputscore_container">
+        <input type="text" class="nicescore" half placeholder="賭け点数を入力して下さい">
+      </div>
+      <div class="odds_container">
+        <p>倍率：<span id="odds"></span>倍です</p>
+      </div>
+      <button class="janken_restart">最初からやり直し</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="janken">
+    <div class="userjanken">
+        <p class="description">※じゃんけんを出す手を選んでください</p>
+        <div class="userhand">
+          <p id="gu_btn" data-value="1"><img src="img/janken_goo.jpg" alt="" width="100" height="100"></p>
+          <p id="cho_btn" data-value="2"><img src="img/janken_choki.jpg" alt="" width="100" height="100"></p>
+          <p id="par_btn" data-value="3"><img src="img/janken_par.jpeg" alt="" width="100" height="100"></p>  
+        </div>
+    </div>
+    <div class="pchand">
+      <p class="description">※コンピュータの出した手は</p>
+      <div id="pc_hands"></div>
+    </div>
+  </div>
+  
+  <div class="jadge_container">
+    <p class="result">※じゃんけんの勝敗！</p>
+    <div id="judgment"></div>
+  </div>
+
+  <div id="gameover">
+    <img src="img/gameover.jpg" alt="" width="200" height="200">
+  </div>
+ 
+</main>
+<footer></footer>
+<script>
+// 初期処理(スコアを初期値を設定する)
+window.addEventListener('load', function(){
+  $("#score").html("100");
+  const odds = Math.ceil((Math.random()*4)+1);  // 倍率を2～5倍に設定
+  $("#odds").html(odds);
+})
+
+// 「最初からやり直し」ボタン押下処理
+$(".janken_restart").on("click", function(){
+  location.reload();  // ページをリロード
+})
+
+//じゃんけん用のSCRIPTを書いてください
+// グーボタン押下時
+$("#gu_btn, #cho_btn, #par_btn").on("click", function(){
+  let scoreText = document.getElementById("score").textContent;
+  let inputText = document.querySelector(".nicescore").value;
+  let oddsText = document.getElementById("odds").textContent;
+  let scoreNum = parseInt(scoreText);
+  let oddsNum = parseInt(oddsText);
+  let value = $(this).data("value");
+  const r = Math.ceil(Math.random()*3);
+
+  // 賭け点数が未入力の場合はエラー
+  // console.log(inputText);
+  if (inputText === "") {
+    alert("賭け点数を入力してください！");
+    return false;
+  }
+  let inputNum = parseInt(inputText);
+   // 持ち点 < 賭け点の場合はエラー
+  if (scoreText < inputNum) {
+    alert("持ち点より大きい点数を入力してます！");
+    return false;
+  }
+
+  // じゃんけんぽん音声を再生
+  const sound = new Audio('audio/jankenpon.wav');
+  sound.play();
+
+  // 音声再生後に処理再開
+  sound.onended = function (){
+    // コンピュータが選択した手
+    const hands = ["janken_goo.jpg", "janken_choki.jpg", "janken_par.jpeg"];
+    // 結果オブジェクト（ユーザが選択した手から勝ち・負け・あいこのパターンを配列化）
+    // キーはユーザーが選択した手
+    const results = {
+      1: ["aiko.jpeg", "youwin.jpeg", "youlose.png"],
+      2: ["youlose.png", "aiko.jpeg", "youwin.jpeg"],
+      3: ["youwin.jpeg", "youlose.png", "aiko.jpeg"]
+    };
+    // PCの手を表示
+    $("#pc_hands").html(`<img src="img/${hands[r-1]}" alt="" width="100" height="100">`);
+    // 勝敗の表示
+    $("#judgment").html(`<img src="img/${results[value][r-1]}" alt="" width="100" height="100">`);
+
+    // スコアを更新
+    if (results[value][r-1] === "youwin.jpeg") {
+      // 一旦入力値で引いて、そこから入力値*倍率を加算する。
+      scoreNum -= inputNum;
+      scoreNum += inputNum*oddsNum; // scoreNum + (inputNum*oddsNum)の省略形
+    } else if (results[value][r-1] === "youlose.png") {
+      scoreNum -= inputNum;
+    }
+    $("#score").html(scoreNum);
+
+    // ゲームオーバーのチェック
+    if (scoreNum <= 0) {
+      const gameOverSound = new Audio('audio/gameover4.mp3');
+      gameOverSound.play();
+      // ゲームオーバーの画像表示
+      $(".jadge_container").hide(); // 勝敗部分を非表示にする
+      $("#gameover").show();  // ゲームオーバーの画像表示
+      $("#gu_btn, #cho_btn, #par_btn").off('click');  // じゃんけんボタンクリックイベント無効化
+    }
+
+    if (results[value][r-1] === "youwin.jpeg" || results[value][r-1] === "youlose.png") {
+      document.querySelector(".nicescore").value = "";  // 賭け点数クリア
+      const odds_re = Math.ceil((Math.random()*4)+1);
+      document.getElementById("odds").textContent = odds_re;
+    }
+  }
+});
+
+</script>
+</body>
+</html>

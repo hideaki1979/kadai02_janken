@@ -1,0 +1,138 @@
+body{
+    margin:0;
+    padding:0; 
+    font-size: 15px;
+    background: url(../img/syoubu.jpg) no-repeat center / cover;
+    background-color:rgba(255,255,255,0.8);
+    background-blend-mode:lighten;
+    height :500px;
+}
+
+header{
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    height: 100px;
+}
+
+.score_container {
+    display: flex;
+    justify-content: center;
+}
+
+.inputscore_container {
+    position: relative;
+    width: 200px;
+    align-self: center;
+}
+
+.nicescore {
+    width: 165px;
+    margin-left: 10px;
+}
+
+.odds_container {
+    font-weight: bold;
+}
+
+#odds {
+    color: red;
+}
+
+.janken_restart {
+    margin-left: 100px;
+    height: 45px;
+    font-size: 12px;
+    border-radius: 15px;
+    background-color: aqua;
+    cursor: pointer;
+}
+
+main{
+    border-bottom:1px solid #ccc;
+}
+
+.maintitle {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.janken {
+    display: flex;
+    border-bottom:1px solid #ccc;
+}
+
+.userjanken {
+    width: 500px;
+    font-weight: bold;
+    text-align: left;
+    margin-right: 80px;
+}
+
+.userhand {
+    display: flex;
+    align-content: space-between;
+}
+
+.userhand p {
+    border: 1px solid #666;
+}
+
+#gu_btn, #cho_btn, #par_btn {
+    transition: 1s;
+    cursor: pointer;
+}
+#gu_btn:hover{
+    background: #0066CC;
+    color:#fff;
+    transform: scale(1.1);
+}
+
+#cho_btn:hover{
+    background: #eb1fa0;
+    color:#fff;
+    transform: scale(1.1);
+}
+
+#par_btn:hover{
+    background: #efe681;
+    color:#fff;
+    transform: scale(1.1);
+}
+
+.pchand {
+    font-weight: bold;
+}
+
+.jadge_container, #gameover {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.result {
+    font-weight: bold;
+}
+
+#gameover {
+    display: none;  /* 初期状態は非表示 */
+    animation: slide-up 0.5s ease forwards;
+}
+
+@keyframes slide-up {
+    0% {
+        transform: translateY(100%);    /* 最初の位置は下 */
+        opacity: 0; /* 最初は透明 */
+    }
+    100% {
+        transform: translateY(0);    /* 最終位置は元の位置 */
+        opacity: 1; /* 最後は透明なし */
+    }
+}
+
+footer{
+    background-color: #fff;
+    border-bottom:1px solid #ccc;
+    text-align: center;
+}
+
+
+
